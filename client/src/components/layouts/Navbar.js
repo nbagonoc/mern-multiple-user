@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 class Navbar extends Component {
   render() {
@@ -8,7 +8,7 @@ class Navbar extends Component {
         <nav className="navbar navbar-expand-md navbar-light bg-light border-bottom">
           <div className="container">
             <Link className="navbar-brand" to="/">
-              Navbar
+              MERN
             </Link>
             <button
               className="navbar-toggler hidden-lg-up"
@@ -23,22 +23,34 @@ class Navbar extends Component {
             </button>
             <div className="collapse navbar-collapse" id="collapsibleNavId">
               <ul className="navbar-nav">
-                <li className="nav-item active">
-                  <Link className="nav-link" to="/">
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    to="/"
+                    activeStyle={{ color: "#212529" }}
+                  >
                     Home
-                  </Link>
+                  </NavLink>
                 </li>
               </ul>
               <ul className="navbar-nav ml-auto">
-                <li className="nav-item active">
-                  <Link className="nav-link" to="/register">
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    to="/register"
+                    activeStyle={{ color: "#212529" }}
+                  >
                     Register
-                  </Link>
+                  </NavLink>
                 </li>
-                <li className="nav-item active">
-                  <Link className="nav-link" to="/login">
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    to="/login"
+                    activeStyle={{ color: "#212529" }}
+                  >
                     Login
-                  </Link>
+                  </NavLink>
                 </li>
               </ul>
             </div>

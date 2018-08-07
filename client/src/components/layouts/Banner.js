@@ -7,7 +7,7 @@ const Banner = () => {
         MERN Stack Multiple User
       </h1>
       <h3 className="text-center font-weight-light">
-        A MERN Stack boilerplate with multiple user roles using Jason Web Tokens
+        A MERN Stack boilerplate with multiple user roles using JSON Web Tokens
       </h3>
     </div>
   );

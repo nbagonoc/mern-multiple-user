@@ -10,6 +10,9 @@ import Navbar from "./components/layouts/Navbar";
 import Home from "./components/home/Home";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Dashboard from "./components/user/dashboard/Dashboard";
+import Moderator from "./components/user/moderator/Moderator";
+import Admin from "./components/user/admin/Admin";
 import NotFound from "./components/notfound/NotFound";
 
 // ASSETS
@@ -26,6 +29,9 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/dashboard" component={Dashboard} />
+              <Route exact path="/moderator" component={Moderator} />
+              <Route exact path="/admin" component={Admin} />
               <Route component={NotFound} />
             </Switch>
           </div>
