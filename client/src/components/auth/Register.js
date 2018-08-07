@@ -46,7 +46,7 @@ class Register extends Component {
       password2: this.state.password2
     };
 
-    this.props.registerUser(newUser);
+    this.props.registerUser(newUser, this.props.history);
 
     this.setState({
       name: "",
@@ -55,9 +55,6 @@ class Register extends Component {
       password2: "",
       errors: {}
     });
-
-    // redirect
-    // this.props.history.push("/login");
   };
 
   render() {
