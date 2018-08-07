@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import classnames from "classnames";
+import { registerUser } from "../../actions/authActions";
 
 class Register extends Component {
   state = {
@@ -30,7 +32,7 @@ class Register extends Component {
       this.setState({ errors: { password: "Password is required" } });
       return;
     }
-    if (this.state.password2 != this.state.password) {
+    if (this.state.password2 !== this.state.password) {
       this.setState({
         errors: { password2: "Confirm password does not match" }
       });
@@ -40,7 +42,8 @@ class Register extends Component {
     const newUser = {
       name: this.state.name,
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
+      password2: this.state.password2
     };
 
     this.props.registerUser(newUser);
@@ -54,7 +57,7 @@ class Register extends Component {
     });
 
     // redirect
-    this.props.history.push("/login");
+    // this.props.history.push("/login");
   };
 
   render() {
@@ -143,4 +146,11 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(Register);
