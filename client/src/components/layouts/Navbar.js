@@ -1,8 +1,18 @@
 import React, { Component } from "react";
 import { NavLink, Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authActions";
 
 class Navbar extends Component {
+  onLogout(e) {
+    e.preventDefault();
+    this.props.logoutUser(this.props.history);
+  }
+
   render() {
+    const { isAuthenticated, user } = this.props.auth;
+
     return (
       <div>
         <nav className="navbar navbar-expand-md navbar-light bg-light border-bottom">
@@ -22,26 +32,60 @@ class Navbar extends Component {
               <span className="navbar-toggler-icon" />
             </button>
             <div className="collapse navbar-collapse" id="collapsibleNavId">
-              <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to="/register"
-                    activeStyle={{ color: "#212529" }}
-                  >
-                    Register
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to="/login"
-                    activeStyle={{ color: "#212529" }}
-                  >
-                    Login
-                  </NavLink>
-                </li>
-              </ul>
+              {isAuthenticated ? (
+                <ul className="navbar-nav ml-auto">
+                  <li className="nav-item dropdown">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#dropdown"
+                      id="navbarDropdown"
+                      role="button"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      Username
+                    </a>
+                    <div
+                      className="dropdown-menu"
+                      aria-labelledby="navbarDropdown"
+                      id="dropdown"
+                    >
+                      <Link className="dropdown-item" to="/dashboard">
+                        Dashboard
+                      </Link>
+                      <a
+                        onClick={this.onLogout.bind(this)}
+                        className="dropdown-item"
+                        href="/logout"
+                      >
+                        Logout
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              ) : (
+                <ul className="navbar-nav ml-auto">
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/register"
+                      activeStyle={{ color: "#212529" }}
+                    >
+                      Register
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/login"
+                      activeStyle={{ color: "#212529" }}
+                    >
+                      Login
+                    </NavLink>
+                  </li>
+                </ul>
+              )}
             </div>
           </div>
         </nav>
@@ -50,4 +94,16 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+Navbar.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(Navbar);
