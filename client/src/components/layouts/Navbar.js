@@ -22,17 +22,6 @@ class Navbar extends Component {
               <span className="navbar-toggler-icon" />
             </button>
             <div className="collapse navbar-collapse" id="collapsibleNavId">
-              <ul className="navbar-nav">
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to="/"
-                    activeStyle={{ color: "#212529" }}
-                  >
-                    Home
-                  </NavLink>
-                </li>
-              </ul>
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <NavLink

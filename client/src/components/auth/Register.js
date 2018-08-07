@@ -63,7 +63,7 @@ class Register extends Component {
     return (
       <div className="container my-3">
         <div className="row">
-          <div className="col-md-6 mx-auto">
+          <div className="col-lg-4 col-md-6 mx-auto">
             <div className="card">
               <div className="card-header">Sign-up</div>
               <div className="card-body">

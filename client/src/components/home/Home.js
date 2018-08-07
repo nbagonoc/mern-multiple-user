@@ -7,9 +7,6 @@ const Home = () => {
   return (
     <div>
       <Banner />
-      <div className="container my-3">
-        <h1>This is the homepage</h1>
-      </div>
     </div>
   );
 };

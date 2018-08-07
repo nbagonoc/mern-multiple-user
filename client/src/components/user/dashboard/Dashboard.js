@@ -1,10 +1,23 @@
 import React, { Component } from "react";
+import Sidebar from "../../layouts/Sidebar";
 
 class Dashboard extends Component {
   render() {
     return (
       <div className="container my-3">
-        <h1>Welcome to the dashboard</h1>
+        <div className="row">
+          <div className="col-md-4">
+            <Sidebar />
+          </div>
+          <div className="col-md-8">
+            <div className="card">
+              <div className="card-header">Welcome to the dashboard</div>
+              <div className="card-body">
+                Every user that is authenticated can access the dashboard
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
