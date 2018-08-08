@@ -18,6 +18,7 @@ import Moderator from "./components/user/moderator/Moderator";
 import Admin from "./components/user/admin/Admin";
 import NotFound from "./components/notfound/NotFound";
 // guards
+import NotAuth from "./components/guards/NotAuth";
 import IsAuth from "./components/guards/IsAuth";
 import IsModerator from "./components/guards/IsModerator";
 import IsAdmin from "./components/guards/IsAdmin";
@@ -55,8 +56,8 @@ class App extends Component {
             <Navbar />
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
+              <NotAuth exact path="/register" component={Register} />
+              <NotAuth exact path="/login" component={Login} />
               <IsAuth exact path="/dashboard" component={Dashboard} />
               <IsModerator exact path="/moderator" component={Moderator} />
               <IsAdmin exact path="/admin" component={Admin} />
