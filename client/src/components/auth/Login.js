@@ -18,16 +18,6 @@ class Login extends Component {
   onSubmitHandler = e => {
     e.preventDefault();
 
-    // validation
-    if (this.state.email === "") {
-      this.setState({ errors: { email: "Email is required" } });
-      return;
-    }
-    if (this.state.password === "") {
-      this.setState({ errors: { password: "Password is required" } });
-      return;
-    }
-
     const userData = {
       email: this.state.email,
       password: this.state.password
@@ -35,6 +25,12 @@ class Login extends Component {
 
     this.props.loginUser(userData, this.props.history);
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
 
   render() {
     const { email, password, errors } = this.state;
@@ -92,8 +88,8 @@ class Login extends Component {
 
 Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
-  // errors: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

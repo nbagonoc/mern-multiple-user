@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import classnames from "classnames";
 import { registerUser } from "../../actions/authActions";
+import classnames from "classnames";
 
 class Register extends Component {
   state = {
