@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import { registerUser } from "../../actions/authActions";
@@ -19,26 +20,6 @@ class Register extends Component {
   onSubmitHandler = e => {
     e.preventDefault();
 
-    // validation
-    if (this.state.name === "") {
-      this.setState({ errors: { name: "Name is required" } });
-      return;
-    }
-    if (this.state.email === "") {
-      this.setState({ errors: { email: "Email is required" } });
-      return;
-    }
-    if (this.state.password === "") {
-      this.setState({ errors: { password: "Password is required" } });
-      return;
-    }
-    if (this.state.password2 !== this.state.password) {
-      this.setState({
-        errors: { password2: "Confirm password does not match" }
-      });
-      return;
-    }
-
     const newUser = {
       name: this.state.name,
       email: this.state.email,
@@ -47,15 +28,13 @@ class Register extends Component {
     };
 
     this.props.registerUser(newUser, this.props.history);
-
-    this.setState({
-      name: "",
-      email: "",
-      password: "",
-      password2: "",
-      errors: {}
-    });
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
 
   render() {
     const { name, email, password, password2, errors } = this.state;
@@ -103,7 +82,7 @@ class Register extends Component {
                   {/* password */}
                   <div className="form-group">
                     <input
-                      type="text"
+                      type="password"
                       name="password"
                       placeholder="Your password"
                       className={classnames("form-control", {
@@ -119,7 +98,7 @@ class Register extends Component {
                   {/* password2 */}
                   <div className="form-group">
                     <input
-                      type="text"
+                      type="password"
                       name="password2"
                       placeholder="Confirm password"
                       className={classnames("form-control", {
@@ -143,8 +122,15 @@ class Register extends Component {
   }
 }
 
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  errors: state.errors
 });
 
 export default connect(

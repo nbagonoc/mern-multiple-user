@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
@@ -67,22 +67,14 @@ class Navbar extends Component {
               ) : (
                 <ul className="navbar-nav ml-auto">
                   <li className="nav-item">
-                    <NavLink
-                      className="nav-link"
-                      to="/register"
-                      activeStyle={{ color: "#212529" }}
-                    >
+                    <Link className="nav-link" to="/register">
                       Register
-                    </NavLink>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <NavLink
-                      className="nav-link"
-                      to="/login"
-                      activeStyle={{ color: "#212529" }}
-                    >
+                    <Link className="nav-link" to="/login">
                       Login
-                    </NavLink>
+                    </Link>
                   </li>
                 </ul>
               )}

@@ -3,31 +3,54 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const key = require("../../config/dbSecretKeys");
 const passport = require("passport");
+const validator = require("validator");
+const isEmpty = require("lodash/isEmpty");
+const key = require("../../config/dbSecretKeys");
 
 // bring in user model
 require("../../models/User");
 const User = mongoose.model("users");
 
+function validateInput(data) {
+  let errors = {};
+
+  if (validator.isEmpty(data.name)) {
+    errors.name = "name is required";
+  }
+  if (validator.isEmpty(data.email)) {
+    errors.email = "email is required";
+  }
+  if (!validator.isEmail(data.email)) {
+    errors.email = "email is not valid";
+  }
+  if (validator.isEmpty(data.password)) {
+    errors.password = "password is required";
+  }
+  if (validator.isEmpty(data.password2)) {
+    errors.password2 = "confirm password is required";
+  }
+  if (!validator.equals(data.password, data.password2)) {
+    errors.password2 = "confirm password did not match";
+  }
+  return {
+    errors,
+    isValid: isEmpty(errors)
+  };
+}
+
 // POST | api/auth/register
 // register process
 router.post("/register", (req, res, next) => {
-  if (!req.body.name) {
-    res.json({ success: false, msg: "name is required" });
-  }
-  if (!req.body.email) {
-    res.json({ success: false, msg: "email is required" });
-  }
-  if (!req.body.password) {
-    res.json({ success: false, msg: "password is required" });
-  }
-  if (req.body.password != req.body.password2) {
-    res.json({ success: false, msg: "password does not match" });
+  const { errors, isValid } = validateInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
   } else {
     User.findOne({ email: req.body.email }).then(user => {
       if (user) {
-        return res.json({ success: false, msg: "Email already exist" });
+        errors.email = "Email already exists";
+        return res.status(400).json(errors);
       } else {
         const newUser = new User({
           name: req.body.name,
