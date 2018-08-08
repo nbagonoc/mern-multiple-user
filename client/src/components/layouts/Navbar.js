@@ -7,7 +7,7 @@ import { logoutUser } from "../../actions/authActions";
 class Navbar extends Component {
   onLogout(e) {
     e.preventDefault();
-    this.props.logoutUser(this.props.history);
+    this.props.logoutUser();
   }
 
   render() {
@@ -44,7 +44,7 @@ class Navbar extends Component {
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
-                      Username
+                      <span className="text-capitalize">{user.name}</span>
                     </a>
                     <div
                       className="dropdown-menu"

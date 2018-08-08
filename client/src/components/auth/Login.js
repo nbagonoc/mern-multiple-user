@@ -66,7 +66,7 @@ class Login extends Component {
                   {/* password */}
                   <div className="form-group">
                     <input
-                      type="text"
+                      type="password"
                       name="password"
                       placeholder="Your password"
                       className={classnames("form-control", {
