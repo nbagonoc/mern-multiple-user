@@ -2,13 +2,26 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { SET_CURRENT_USER, CLEAR_CURRENT_USER, GET_ERRORS } from "./types";
+import {
+  SET_CURRENT_USER,
+  CLEAR_CURRENT_USER,
+  GET_ERRORS,
+  CLEAR_ERRORS
+} from "./types";
 
 // register user
 export const registerUser = (userData, history) => dispatch => {
   axios
     .post("/api/auth/register", userData)
-    .then(res => history.push("/login"))
+    .then(res => {
+      // redirect user to login page
+      history.push("/login");
+      // clear errors
+      dispatch({
+        type: CLEAR_ERRORS,
+        payload: {}
+      });
+    })
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
@@ -34,6 +47,11 @@ export const loginUser = (userData, history) => dispatch => {
       dispatch(setCurrentUser(decoded));
       // redirect user
       history.push("/dashboard");
+      // clear errors
+      dispatch({
+        type: CLEAR_ERRORS,
+        payload: {}
+      });
     })
     .catch(err =>
       dispatch({
@@ -55,13 +73,9 @@ export const setCurrentUser = decoded => {
 export const logoutUser = () => dispatch => {
   // remove token from localStorage
   localStorage.removeItem("jwtToken");
-  // remove auth header
-  // setAuthToken(false);
-  // set current user to {} which will set isAuthenticated to false
-  // dispatch(setCurrentUser({}));
+  // Clear the current user
   dispatch({
     type: CLEAR_CURRENT_USER,
     payload: {}
   });
-  window.location.href = "/login";
 };

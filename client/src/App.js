@@ -26,7 +26,8 @@ import IsAdmin from "./components/guards/IsAdmin";
 // ASSETS
 import "./App.css";
 
-// check for token
+// TOKEN CHECKER
+// Checks the local storage if there's a token, and if it still valid
 if (localStorage.jwtToken) {
   // set auth token header auth
   setAuthToken(localStorage.jwtToken);
@@ -40,10 +41,6 @@ if (localStorage.jwtToken) {
   if (decoded.exp < currentTime) {
     // logout user
     store.dispatch(logoutUser());
-    // clear current profile
-    // store.dispatch(clearCurrentProfile());
-    // redirect login
-    window.location.href = "/login";
   }
 }
 
