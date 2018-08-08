@@ -13,6 +13,7 @@ const userSchema = new Schema({
   role: {
     type: String,
     default: "subscriber"
+    // roles available to this proj: admin, moderator, subscriber
   },
   password: {
     type: String
