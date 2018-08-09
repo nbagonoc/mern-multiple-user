@@ -12,57 +12,38 @@ const key = require("../../config/dbSecretKeys");
 require("../../models/User");
 const User = mongoose.model("users");
 
-// Register validation
-function validateRegister(data) {
-  let errors = {};
-
-  if (validator.isEmpty(data.name)) {
-    errors.name = "name is required";
-  }
-  if (validator.isEmpty(data.email)) {
-    errors.email = "email is required";
-  }
-  if (!validator.isEmail(data.email)) {
-    errors.email = "email is not valid";
-  }
-  if (validator.isEmpty(data.password)) {
-    errors.password = "password is required";
-  }
-  if (validator.isEmpty(data.password2)) {
-    errors.password2 = "confirm password is required";
-  }
-  if (!validator.equals(data.password, data.password2)) {
-    errors.password2 = "confirm password did not match";
-  }
-  return {
-    errors,
-    isValid: isEmpty(errors)
-  };
-}
-
-// Login validation
-function validateLogin(data) {
-  let errors = {};
-
-  if (validator.isEmpty(data.email)) {
-    errors.email = "email is required";
-  }
-  if (!validator.isEmail(data.email)) {
-    errors.email = "email is not valid";
-  }
-  if (validator.isEmpty(data.password)) {
-    errors.password = "password is required";
-  }
-  return {
-    errors,
-    isValid: isEmpty(errors)
-  };
-}
-
 // POST | api/auth/register
 // register process
 router.post("/register", (req, res, next) => {
   const { errors, isValid } = validateRegister(req.body);
+
+  // Register validation
+  function validateRegister(data) {
+    let errors = {};
+
+    if (validator.isEmpty(data.name)) {
+      errors.name = "name is required";
+    }
+    if (validator.isEmpty(data.email)) {
+      errors.email = "email is required";
+    }
+    if (!validator.isEmail(data.email)) {
+      errors.email = "email is not valid";
+    }
+    if (validator.isEmpty(data.password)) {
+      errors.password = "password is required";
+    }
+    if (validator.isEmpty(data.password2)) {
+      errors.password2 = "confirm password is required";
+    }
+    if (!validator.equals(data.password, data.password2)) {
+      errors.password2 = "confirm password did not match";
+    }
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    };
+  }
 
   if (!isValid) {
     return res.status(400).json(errors);
@@ -98,6 +79,25 @@ router.post("/register", (req, res, next) => {
 // Login process
 router.post("/login", (req, res, next) => {
   const { errors, isValid } = validateLogin(req.body);
+
+  // Login validation
+  function validateLogin(data) {
+    let errors = {};
+
+    if (validator.isEmpty(data.email)) {
+      errors.email = "email is required";
+    }
+    if (!validator.isEmail(data.email)) {
+      errors.email = "email is not valid";
+    }
+    if (validator.isEmpty(data.password)) {
+      errors.password = "password is required";
+    }
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    };
+  }
 
   if (!isValid) {
     return res.status(400).json(errors);
