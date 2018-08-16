@@ -55,30 +55,39 @@ router.post("/register", (req, res, next) => {
   if (!isValid) {
     return res.status(400).json(errors);
   } else {
-    User.findOne({ email: req.body.email }).then(user => {
-      if (user) {
-        errors.email = "Email already exists";
-        return res.status(400).json(errors);
-      } else {
-        const newUser = new User({
-          name: req.body.name,
-          email: req.body.email,
-          password: req.body.password
-        });
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) {
-              res.json({ success: false, msg: "Failed to register user" });
-            } else {
-              newUser.password = hash;
-              newUser.save().then(user => {
-                res.json({ success: true, msg: "User registered" });
-              });
-            }
+    User.findOne({ email: req.body.email })
+      .then(user => {
+        if (user) {
+          errors.email = "Email already exists";
+          return res.status(400).json(errors);
+        } else {
+          const newUser = new User({
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password
           });
-        });
-      }
-    });
+          bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+              if (err) {
+                res.json({ success: false, msg: "Failed to register user" });
+              } else {
+                newUser.password = hash;
+                newUser
+                  .save()
+                  .then(user => {
+                    res.json({ success: true, msg: "User registered" });
+                  })
+                  .catch(ex => {
+                    return res.status(500).send("Something went wrong");
+                  });
+              }
+            });
+          });
+        }
+      })
+      .catch(ex => {
+        return res.status(500).send("Something went wrong");
+      });
   }
 });
 
@@ -112,41 +121,50 @@ router.post("/login", (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    User.findOne({ email }).then(user => {
-      // check for user
-      if (!user) {
-        errors.email = "User does not exist";
-        return res.status(400).json(errors);
-      } else {
-        // check password
-        bcrypt.compare(password, user.password).then(isMatch => {
-          if (isMatch) {
-            // user matched
-            const payload = {
-              id: user.id,
-              name: user.name,
-              role: user.role
-            };
-            // create JWT payload
-            // sign token
-            jwt.sign(
-              payload,
-              key.secretOrKey,
-              { expiresIn: 86400 },
-              (err, token) => {
-                res.json({
-                  success: true,
-                  token: "JWT " + token
-                });
+    User.findOne({ email })
+      .then(user => {
+        // check for user
+        if (!user) {
+          errors.email = "User does not exist";
+          return res.status(400).json(errors);
+        } else {
+          // check password
+          bcrypt
+            .compare(password, user.password)
+            .then(isMatch => {
+              if (isMatch) {
+                // user matched
+                const payload = {
+                  id: user.id,
+                  name: user.name,
+                  role: user.role
+                };
+                // create JWT payload
+                // sign token
+                jwt.sign(
+                  payload,
+                  key.secretOrKey,
+                  { expiresIn: 86400 },
+                  (err, token) => {
+                    res.json({
+                      success: true,
+                      token: "JWT " + token
+                    });
+                  }
+                );
+              } else {
+                errors.password = "Password incorrect";
+                return res.status(400).json(errors);
               }
-            );
-          } else {
-            errors.password = "Password incorrect";
-            return res.status(400).json(errors);
-          }
-        });
-      }
-    });
+            })
+            .catch(ex => {
+              return res.status(500).send("Something went wrong");
+            });
+        }
+      })
+      .catch(ex => {
+        return res.status(500).send("Something went wrong");
+      });
   }
 });
 
