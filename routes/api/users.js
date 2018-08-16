@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
+const isAdmin = require("../../guards/isAdmin");
+const isModerator = require("../../guards/isModerator");
 
 // bring in user model
 require("../../models/User");
@@ -27,7 +29,7 @@ router.get(
 // view users list
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  [passport.authenticate("jwt", { session: false }), isAdmin],
   (req, res) => {
     User.find({ role: "subscriber" }, (err, users) => {
       if (err) {
@@ -43,7 +45,7 @@ router.get(
 // get user
 router.get(
   "/show/:id",
-  passport.authenticate("jwt", { session: false }),
+  [passport.authenticate("jwt", { session: false }), isAdmin],
   (req, res) => {
     User.findOne({ _id: req.params.id }, (err, user) => {
       if (err) {
@@ -59,7 +61,7 @@ router.get(
 // update user
 router.put(
   "/update/:id",
-  passport.authenticate("jwt", { session: false }),
+  [passport.authenticate("jwt", { session: false }), isAdmin],
   (req, res) => {
     if (!req.body.name) {
       res.json({ success: false, msg: "name is required" });
@@ -80,16 +82,20 @@ router.put(
 
 // DELETE | api/users/delete/:id
 // delete user
-router.delete("/delete/:id", (req, res) => {
-  User.findOne({ _id: req.params.id }, (err, user) => {
-    user.remove(err => {
-      if (err) {
-        res.json({ success: false, message: err });
-      } else {
-        res.json({ success: true, message: "blog post deleted" });
-      }
+router.delete(
+  "/delete/:id",
+  [passport.authenticate("jwt", { session: false }), isAdmin],
+  (req, res) => {
+    User.findOne({ _id: req.params.id }, (err, user) => {
+      user.remove(err => {
+        if (err) {
+          res.json({ success: false, message: err });
+        } else {
+          res.json({ success: true, message: "blog post deleted" });
+        }
+      });
     });
-  });
-});
+  }
+);
 
 module.exports = router;
