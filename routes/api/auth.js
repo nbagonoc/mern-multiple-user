@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const validator = require("validator");
-const isEmpty = require("lodash/isEmpty");
+const isEmpty = require("../../utils/isEmpty");
 const key = require("../../config/dbSecretKeys");
 
 // bring in user model
@@ -21,6 +21,13 @@ router.post("/register", (req, res, next) => {
   function validateRegister(data) {
     let errors = {};
 
+    // check if data send is ""
+    data.name = !isEmpty(data.name) ? data.name : "";
+    data.email = !isEmpty(data.email) ? data.email : "";
+    data.password = !isEmpty(data.password) ? data.password : "";
+    data.password2 = !isEmpty(data.password2) ? data.password2 : "";
+
+    // validation using validator
     if (validator.isEmpty(data.name)) {
       errors.name = "name is required";
     }
