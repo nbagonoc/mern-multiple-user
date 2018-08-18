@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
@@ -75,7 +76,16 @@ class Login extends Component {
                       <div className="invalid-feedback">{errors.password}</div>
                     )}
                   </div>
-                  <button className="btn btn-success">Sign-in</button>
+                  <button
+                    disabled={!(this.state.email && this.state.password)}
+                    className="btn btn-success"
+                  >
+                    Sign-in
+                  </button>
+                  <span className="small text-muted d-block mt-2">
+                    Not yet registered yet?
+                    <Link to="/register"> Register now</Link>
+                  </span>
                 </form>
               </div>
             </div>
